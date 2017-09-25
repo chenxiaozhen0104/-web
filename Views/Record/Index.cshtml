@@ -1,0 +1,305 @@
+﻿
+@{
+    ViewBag.Title = "历史记录";
+}
+
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        list-style: none;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        font-size: 12px;
+    }
+
+    #recordContainer {
+        height: 100%;
+        width: 100%;
+        padding: 0px 30px;
+        margin:0 auto;
+        position: relative;
+    }
+
+    .search-content {
+        height: 100px;
+        padding: 20px 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+    }
+
+    .search-content li {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
+
+    .search-content li select, .search-content li input {
+        height: 35px;
+        width: 160px;
+        border: 1px solid #3aadfe;
+        padding: 0 10px;
+        border-radius: 3px;
+    }
+
+    .search-btn {
+        height: 35px;
+        width: 80px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background-color: #237bff;
+        margin-left: 30px;
+       border-radius:3px;
+    }
+    .user-href {
+        height: 35px;
+        width: 100px;
+        text-decoration: none;
+        background-color: #ff0000;
+        margin-left: 50px;
+        border-radius: 3px;
+        font-size: 14px;
+        color: #fff;
+        line-height: 35px;
+        text-align: center;
+    } 
+    
+    .table-content {
+        width: 100%;
+        height: 790px;
+        padding: 10px 0px;
+        overflow-y: auto;
+    }
+    
+    table {
+        table-layout: fixed;
+        empty-cells: show;
+        border-collapse: collapse;
+    }
+
+    td {
+        min-height: 40px;
+        height: 40px;
+        text-align: center;
+    }
+
+
+    table.t1 {
+        border: 1px solid #cad9ea;
+        color: #666;
+    }
+
+    table.t1 th {
+        height: 40px;
+        background-color: #fff;
+    }
+
+    table.t1 td, table.t1 th {
+        border: 1px solid #cad9ea;
+        padding: 0 1em 0;
+    }
+
+    table.t1 tr:nth-child(odd) {
+        background-color: #f5fafe;
+    }
+
+    div.record-footer {
+        width:100%;
+        position: absolute;
+        height:100px;
+        bottom: 0px;
+        right:0;
+        display:flex;
+        align-items:center;
+        justify-content:flex-end;
+        padding:0 30px;
+    }
+    .faceImg{
+        margin-top:3px;
+        width:100px;
+        height:50px;
+        display:inline-block;
+    }
+    .pagination button {
+        height: 40px;
+        width: 100px;
+        border: none;
+        outline: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        display: inline-block;
+        color: #428bca;
+        border-radius:3px;
+    }
+    .pagination span{
+        height: 40px;
+        display:inline-block;
+        line-height:40px;
+        padding: 0 10px;
+        color: #428bca;
+        border-radius: 3px;
+        border: 1px solid #ddd;
+    }
+    .pagination button:active {
+        color: #fff;
+        background-color: #428bca;
+        border: 1px solid #428bca;
+    }
+    .pagination  .btnDisabled {
+        color: #bfbfbf;
+        background: #f2f2f2;
+    }
+
+</style>
+
+<div id="recordContainer">
+    <ul class="search-content">
+        <li>
+            <input type="text" placeholder="请输门名称或车牌号" v-model="search.key">
+        </li>
+        <li>
+            <span>类型：</span>
+            <select v-model="search.type">
+                <option v-for="type in identifyType" :value="type.val" v-html="type.text"></option>
+            </select>
+        </li>
+        <li>
+            <span>进门类型：</span>
+            <select v-model="search.inout">
+                <option v-for="typeItem in Doortype" :value="typeItem.val" v-html="typeItem.text"></option>
+            </select>
+        </li>
+        <li>
+            <span>是否通过：</span>
+            <select v-model="search.isPass">
+                <option v-for="isNo in isPass" :value="isNo.bol" v-html="isNo.text"></option>
+            </select>
+        </li>
+        <li>
+            <span>开始时间：</span>
+            <input type="date" v-model="search.beginTime">
+        </li>
+        <li>
+            <span>结束时间：</span>
+            <input type="date" v-model="search.endTime">
+        </li>
+        <li>
+            <button v-on:click="load" class="search-btn">搜索</button>
+        </li>
+        <li>
+            <a   href="/User/Index"  class="user-href">用户列表</a>
+        </li>
+    </ul>
+   <div class="table-content">
+       <table width="100%" id="mytab" border="1" class="t1">
+           <thead>
+           <th width="20%">信息</th>
+           <th width="20%">门名称</th>
+           <th width="20%">类型</th>
+           <th width="10%">进门类型</th>
+           <th width="10%">是否通过</th>
+           <th width="20%">时间</th>
+           </thead>
+           <tr v-for="(itemData,i) in userData">
+               <td>
+                   <img class="faceImg" :src="infos(itemData.TecognitionType,itemData)"  v-if="itemData.TecognitionType=='Face'" / >
+                   <span v-else>{{infos(itemData.TecognitionType,itemData)}}</span>
+                  
+               </td>
+               <td>{{itemData.DoorName}}</td>
+               <td>{{itemData.TecognitionType|type}}</td>
+               <td>{{itemData.InOut=="In"?"进门":"出门"}}</td>
+               <td>{{itemData.IsPass?"是":"否"}}</td>
+               <td>{{itemData.CreateTime|time}}</td>
+           </tr>
+       </table>
+   </div>
+
+    <div class="record-footer">
+        <div class="pagination">
+            <button  v-bind:disabled="search.pageIndex==1" :class="{ btnDisabled: search.pageIndex==1 }" v-on:click="pre">上一页</button>
+            <button v-bind:disabled="search.pageIndex==count" :class="{ btnDisabled: search.pageIndex==count }" v-on:click="next">下一页</button>
+            <span>当前第{{search.pageIndex}}页 /共{{count}}页</span>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Content/vue.min.js"></script>
+<script type="text/javascript">
+    var record = new Vue({
+        el: "#recordContainer",
+        data: {
+            Doortype: [{ text: "全部", val: "" }, { text: "进门", val: "In" }, { text: "出门", val: "Out" }],
+            isPass: [{ text: "全部", bol: "" }, { text: "是", bol: true }, { text: "否", bol: false }],
+            identifyType: [{ text: "全部", val: "" }, { text: "人脸", val: "Face" }, { text: "车牌", val: "Plate" }, { text: "电瓶车", val: "ElectricCar" }],
+            userData: [],
+            search: {
+                key: '',
+                inout: '',
+                beginTime: '',
+                endTime: '',
+                type: '',
+                isPass: '',
+                pageIndex: 1
+            },
+            count: 0
+        },
+        filters: {
+            time: function (time) {
+                return eval('new ' + time.replace(/\//g, '')).toLocaleString()
+            },
+            type: function (type) {
+                if (type == "Face") {
+                    return "人脸"
+                }
+                if (type == "Plate") {
+                    return "车牌"
+                }
+                if (type == "ElectricCar") {
+                    return "电瓶车"
+                }
+            }
+        },
+        methods: {
+            load: function () {
+                var self = this;
+                $.get("/Record/Get", this.search, function (result) {
+                    self.count = Math.ceil(result.count/18);
+                    self.userData = result.data;
+                    console.log(result)
+                });
+            },
+            infos(type, item) {
+                if (type == "Face") {
+                    return item.UserImagePath
+                }
+                if (type == "Plate") {
+                    return item.Plate
+                }
+                if (type == "ElectricCar") {
+                    return item.RFID
+                }
+            },
+            pre() {
+                this.search.pageIndex--;
+                this.load()
+            },
+            next() {
+                this.search.pageIndex++;
+                this.load()
+            }
+        },
+        created: function () {
+            this.load()
+        }
+    })
+
+</script>

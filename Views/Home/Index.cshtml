@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewBag.Title = "登录";
+}
+<style type="text/css">
+    .login-content {
+        height: 100%;
+        width: 100%;
+        background: url('../../Content/bbb.jpg') no-repeat;
+        background-size: cover;
+    }
+    .login-form {
+        padding: 100px 0px 50px 0px;
+    }
+
+    .login-form h1 {
+        color: #fff;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom:50px;
+    }
+
+    .top-login {
+        width: 130px;
+        height: 130px;
+        display: block;
+        -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
+        -moz-transform: rotate(45deg) translate3d(0, 0, 0);
+        -ms-transform: rotate(45deg) translate3d(0, 0, 0);
+        -o-transform: rotate(45deg) translate3d(0, 0, 0);
+        transform: rotate(45deg) translate3d(0, 0, 0);
+        margin: 0 auto 60px;
+        background: #fff;
+        position: relative;
+    }
+
+    .top-login span {
+        border: 2px solid #F36;
+        width: 105px;
+        height: 105px;
+        display: block;
+        margin: 0px auto;
+        position: absolute;
+        top: 11px;
+        left: 11px;
+    }
+
+    .top-login span img {
+        -webkit-transform: rotate(-45deg) translate3d(0, 0, 0);
+        -moz-transform: rotate(-45deg) translate3d(0, 0, 0);
+        -ms-transform: rotate(-45deg) translate3d(0, 0, 0);
+        -o-transform: rotate(-45deg) translate3d(0, 0, 0);
+        transform: rotate(-45deg) translate3d(0, 0, 0);
+        margin: 20px 0 0 20px;
+    }
+    /*----*/
+
+    .login-top {
+        width: 460px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .login-ic {
+        background: rgba(255, 255, 255, 0.32);
+        height:36px;
+        padding: 8px;
+        margin-bottom:30px;
+    }
+
+    .login-ic i {
+        background: url('../../Content/m.png')no-repeat 6px 6px;
+        width: 38px;
+        height: 38px;
+        float: left;
+        display: inline-block;
+    }
+
+    .login-ic i.icon {
+        background: url('../../Content/l.png')no-repeat 6px 6px;
+    }
+
+    .login-ic input[type="text"], .login-ic input[type="password"] {
+        float: left;
+        background: none;
+        outline: none;
+        font-size: 15px;
+        color: #fff;
+        height:35px;
+        border: none;
+        border-left: 1px solid #fff;
+        width: 82%;
+        border-radius:0;
+        padding-left:15px;
+        display: inline-block;
+        margin-left: 7px;
+    }
+
+    .log-bwn {
+        text-align: center;
+    }
+
+    .log-bwn input[type="submit"] {
+        font-size: 15px;
+        color: #fff;
+        padding: 13px 0;
+        background: #ff3366;
+        display: inline-block;
+        width: 100%;
+        outline: none;
+        border: 2px solid #ff3366;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .log-bwn input[type="submit"]:hover {
+        transition: all 0.3s ease;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        -o-transition: all 0.3s ease;
+        border: 2px solid #fff;
+    }
+
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #fff;
+        opacity: 1;
+    }
+
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #fff;
+        opacity: 1;
+    }
+
+    input:-ms-input-placeholder {
+        color: #fff;
+        opacity: 1;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #fff;
+        opacity: 1;
+    }
+    .alertText{
+        margin-top:20px;
+        color:#fff;
+        display:none;
+
+    }
+
+</style>
+
+
+
+
+<div class="login-content">
+    <div class="login-form">
+        <div class="top-login">
+            <span><img src="/Content/group.png" alt="" /></span>
+        </div>
+        <h1>智安小区</h1>
+        <div class="login-top">
+            <div class="login-ic">
+                <i></i>
+                <input type="text"  placeholder="请输入用户名" id="userName" />
+                <div class="clear"> </div>
+            </div>
+            <div class="login-ic">
+                <i class="icon"></i>
+                <input type="password" placeholder="请输入密码" id="password" />
+                <div class="clear"> </div>
+            </div>
+
+            <div class="log-bwn">
+                <input type="submit" value="登录" id="loginBtn">
+            </div>
+
+            <p class="alertText"></p>
+
+          
+        </div>
+    </div>		
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+   
+
+    $("#loginBtn").click(function () {
+        var userName = $("#userName").val()
+        var password = $("#password").val()
+
+        $.post('/Home/Login', { name: userName, password: password }, function (res) {
+            console.log(res)
+            if (res.success) {
+                location.href = "/Record/Index"
+            } else {
+                $(".alertText").text(res.error).show()
+            }
+        })
+
+        
+    })
+
+</script>

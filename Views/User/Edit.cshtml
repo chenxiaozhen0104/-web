@@ -1,0 +1,150 @@
+﻿@model ZL.Model.User
+@{
+    ViewBag.Title = "Edit";
+    var types = new List<SelectListItem>
+   {
+    new SelectListItem{Text="业主"},
+    new SelectListItem{Text="访客"},
+    new SelectListItem{Text="工作人员"}
+   };
+}
+
+<div class="title">
+    <span>人员信息录入</span>
+</div>
+
+
+<form method="post">
+    <div style="display:flex;">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ImagePath)
+        @Html.HiddenFor(m => m.BikePhoto)
+        <div>
+            <label class="sub-title">基本信息</label>
+            <div class="row">
+                <span class="label-title">姓名：</span> <input type="text" name="Name" value="@Html.Value("Name")" placeholder="姓名" /><span class="tip">请输入真实姓名</span>
+            </div>
+            <div class="row">
+                <span class="label-title">身份证：</span> <input type="text" name="UID" value="@Html.Value("UID")" placeholder="身份证号码" />
+            </div>
+            <div class="row">
+                <span class="label-title">手机号：</span> <input type="text" name="Mobile" value="@Html.Value("Mobile")" placeholder="手机号" />
+            </div>
+            <div class="row">
+                <span class="label-title">机动车车牌：</span> <input type="text" name="Plate" value="@Html.Value("Plate")" placeholder="机动车车牌" /><span class="tip">多辆机动车请用竖线“|”分隔</span>
+            </div>
+            <div class="row">
+                <span class="label-title">用户卡号：</span> <input type="text" name="CardNumber" value="@Html.Value("CardNumber")" placeholder="非机动车卡号" /><span class="tip">多辆车请用竖线“|”分隔</span>
+            </div>
+            <div class="row">
+                <span class="label-title">非机动车卡号：</span> <input type="text" name="BikeCardNumber" value="@Html.Value("BikeCardNumber")" placeholder="非机动车卡号" /><span class="tip">多辆车请用竖线“|”分隔</span>
+            </div>
+            <div class="row">
+                <span class="label-title">非机动车图片：</span><div class="photo-block">
+                    <img style="margin-left:10px" src="~/Content/timg.jpg" id="bikephoto" height="100" />
+                    <div class="btn-panel" style="position:relative">
+                        <button type="button" style="width:100px" id="upload">上传照片</button>
+                        <input type="file" id="bikefilePhoto" style="opacity:0;position:absolute;width:100%;height:30px;left:0;top:0;" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <span class="label-title">地址：</span> <input type="text" name="Address" value="@Html.Value("Address")" placeholder="地址" /><span class="tip">例：xxx幢xxx单元xxx号</span>
+            </div>
+            <div class="row">
+                <span class="label-title">性别：</span>
+                <label>@Html.RadioButtonFor(m => m.Sex, "男") 男</label>
+                <label>@Html.RadioButtonFor(m => m.Sex, "女") 女</label>
+            </div>
+            <div class="row">
+                <span class="label-title">类型：</span>
+                @Html.DropDownListFor(m => m.Type, types)
+            </div>
+            <div class="row">
+                <span class="label-title">人员分组：</span>
+                <label>@Html.RadioButtonFor(m => m.UserGroup, "白名单") 白名单</label>
+                <label>@Html.RadioButtonFor(m => m.UserGroup, "黑名单") 黑名单</label>
+                <label>@Html.RadioButtonFor(m => m.UserGroup, "普通") 普通</label>
+            </div>
+        </div>
+        <div class="col">
+            <label class="sub-title">人脸信息</label>
+            <div class="row">
+                <div class="photo-block">
+                    <video id="video" height="300"></video>
+                    <div class="btn-panel">
+                        <button type="button" style="width:100px" id="tack">拍照</button>
+                    </div>
+                </div>
+                <div class="photo-block">
+                    <img style="margin-left:10px" src="~/Content/timg.jpg" id="photo" height="300" />
+                    <div class="btn-panel" style="position:relative">
+                        <button type="button" style="width:100px" id="upload">上传照片</button>
+                        <input type="file" id="filePhoto" style="opacity:0;position:absolute;width:100%;height:30px;left:0;top:0;" />
+                    </div>
+                </div>
+                <input type="hidden" name="base64photo" id="photoData" />
+                <input type="hidden" name="bikePhotoData" id="bikePhotoData" />
+            </div>
+        </div>
+    </div>
+
+
+    <div style="padding:2em;text-align:center;width:100%;box-sizing:border-box">
+        <button class="btn" type="submit">保 存</button> <button class="btn" onclick="history.back()" type="button">返 回</button>
+    </div>
+</form>
+
+<script>
+    var video = document.getElementById('video'),
+        canvas = document.createElement('canvas'),
+        snap = document.getElementById('tack'),
+        img = document.getElementById('photo'),
+        hidPhoto = document.getElementById('photoData'),
+        filePhoto = document.getElementById('filePhoto'),
+
+        bikeimg = document.getElementById('bikephoto'),
+        bikehidPhoto = document.getElementById('bikePhotoData'),
+        bikefilePhoto = document.getElementById('bikefilePhoto'),
+
+        vendorUrl = window.URL || window.webkitURL;
+
+    //媒体对象
+    navigator.getMedia = navigator.getUserMedia ||
+        navagator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia;
+    navigator.getMedia({
+        video: true, //使用摄像头对象
+        audio: false  //不适用音频
+    }, function (strem) {
+        video.src = vendorUrl.createObjectURL(strem);
+        video.play();
+    }, function (error) {
+        //error.code
+        console.log(error);
+    });
+    snap.addEventListener('click', function () {
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        var data = canvas.toDataURL("image/jpeg");
+        img.src = data
+        hidPhoto.value = data
+    })
+    filePhoto.onchange = function () {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            console.log(e)
+            hidPhoto.value = img.src = e.target.result;
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+    bikefilePhoto.onchange = function () {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            bikehidPhoto.value = bikeimg.src = e.target.result;
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+</script>

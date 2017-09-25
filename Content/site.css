@@ -1,0 +1,141 @@
+﻿
+
+html,body {
+    padding: 0;
+    margin: 0;
+    height:100%;
+    width:100%;
+    font-family:'Microsoft YaHei','Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.container {
+    height:100%;
+    width:100%;
+}
+input[type=text], select {
+    border: 1px solid #3aadfe;
+    width: 200px;
+    height: 2em;
+    padding: 0 10px;
+    border-radius: 3px;
+}
+
+a {
+    color: #3aadfe;
+}
+.sub-title {
+    margin: 10px 20px;
+    display: block;
+    padding:0 10px;
+    font-weight: bold;
+    color:#3aadfe;
+    border-left: 5px solid #3aadfe;
+}
+.row {
+    margin:0 20px;
+    min-height: 3em;
+    line-height: 3em;
+}
+
+.photo-block {
+    vertical-align: top;
+    display: inline-block;
+    line-height: 0;
+    text-align: center;
+}
+
+    .photo-block > .btn-panel {
+        padding: 10px;
+    }
+
+.monospaced-font {
+    font-family: 'Courier New';
+}
+
+.title {
+    height: 80px;
+    background-color: #3aadfe;
+    color: #ffffff;
+    margin-bottom: 15px;
+    line-height: 80px;
+    font-size: 20px;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.goBack {
+    display: inline-block;
+    width: 100px;
+    height: 35px;
+    background: #fff;
+    color: #3aadfe;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.tip {
+    color: #aaa;
+    font-size: 12px;
+    font-style: oblique;
+    margin-left: 10px;
+}
+
+.label-title {
+    display: inline-block;
+    width: 8em;
+    text-align: right;
+}
+
+#photo {
+    vertical-align: top;
+}
+
+.btn {
+    background: #3aadfe;
+    color: #fff;
+    padding: 10px 18px;
+    transition: all 400ms;
+    width: 200px;
+    border: none;
+}
+
+    .btn:hover {
+        background-color: #2378ff;
+    }
+
+
+.table {
+    width: 100%;
+    text-align: center;
+    font-family: verdana,arial,sans-serif;
+    font-size: 11px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+}
+
+
+    .table th {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #dedede;
+    }
+
+    .table td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #ffffff;
+    }
+
+    .col{
+        flex:1;
+    }

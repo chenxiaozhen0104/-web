@@ -1,0 +1,59 @@
+﻿@model List<ZL.Model.User>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="title">
+    <span>人员信息管理</span>
+    <span class="goBack" onclick="history.back()">返回</span>
+</div>
+<div style="margin:10px">
+    <table class="table">
+        <tr>
+            <th>姓名</th>
+            <th>照片</th>
+            <th>类型</th>
+            <th>机动车</th>
+            <th>非机动车</th>
+            <th>操作</th>
+        </tr>
+
+        @if (Model == null)
+        {
+            <tr>
+                <td colspan="10">没有任何数据！</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td class="monospaced-font">@(item.ImagePath)<br />
+                    @(item.BikePhoto)</td>
+                    <td>@item.Type</td>
+                    <td>@item.Plate</td>
+                    <td>@item.BikeCardNumber</td>
+                    <td>
+                        <a href="/User/Edit/@item.Id">编辑</a> |
+                        <a href="javascript:del('@item.Id')">删除</a>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="10" style="border:none">
+                <a style="float:right" href="/User/Edit"> + 添加新人员</a>
+            </td>
+        </tr>
+    </table>
+    
+</div>
+<script>
+    function del(id) {
+        if (confirm("确认删除？")) {
+            location.href = "/User/Del/" + id
+        }
+    }
+</script>
